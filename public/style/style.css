@@ -1,0 +1,106 @@
+
+*{
+    margin: 0%;
+    padding: 0;
+    font-family: sans-serif;
+}
+body {
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+     background-image: url('../images/soccer-sport-environment-filed.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    position: relative; /* Indispensable pour le positionnement du before */
+    overflow: hidden;
+
+}
+body::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: black;
+    opacity: 0.5;
+    z-index: 1;
+}
+body > * {
+    position: relative;
+    z-index: 2;
+}
+/* boday start */
+.container{
+    height: 70vh;
+    display: flex;
+    justify-content: space-between
+}
+.container #informations{
+    width:50% ;
+    display: flex;
+    background-image: url('../images/soccer-sport-environment-filed.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+}
+
+/* Formulaire register */
+#registerForm {
+    background: rgba(255, 255, 255, 0.9); /* Fond blanc semi-transparent */
+    padding: 10px;
+    border-radius: 0 15px 15px 0;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    width: 50%;
+    
+    text-align: center;
+}
+
+#registerForm h1 {
+    margin-bottom: 15px;
+    font-family: Arial, sans-serif;
+}
+
+.input-group {
+    display: flex;
+    align-items: center;
+    background: #f0f0f0;
+    margin-bottom: 15px;
+    padding: 5px 15px;
+    border-radius: 8px;
+}
+
+.input-group i {
+    color: #555;
+    margin-right: 10px;
+}
+
+.input-group input {
+    border: none;
+    background: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+}
+
+.btn-submit {
+    background-color: #008080; /* Une nuance proche de l'aqua mais plus foncée */
+    color: white;
+    border: none;
+    padding: 12px;
+    width: 50%;
+    border-radius: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: 0.3s;
+    float: left;
+}
+
+.btn-submit:hover {
+    background-color: #005f5f;
+}
