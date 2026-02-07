@@ -9,3 +9,9 @@ Route::get('/register', [RegisterController::class,'index'])->name('register.ind
 Route::post('/register/register', [RegisterController::class,'register'])->name('register.register');
 Route::get('/', [LoginController::class,'index'])->name('login.index');
 Route::post('/login', [LoginController::class,'login'])->name('login.check');
+Route::post('/logout', [LoginController::class,'logout'])->name('login.logout');
+
+// Admin
+Route::get('/dashboard', function () {
+    return view('admin.dashboard');
+})->name('dashboard');

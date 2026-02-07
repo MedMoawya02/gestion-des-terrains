@@ -17,12 +17,16 @@ class LoginController extends Controller
         ]);
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->route('register.index');
+            return redirect()->route('dashboard');
         }
          return back()->withErrors([
             'email' => 'Email ou mot de passe incorrect.',
         ])->onlyInput('email');
+    }
 
+    public function logout(){
+        Auth::logout();
+        return redirect()->route('login.index');
     }
    
 }
