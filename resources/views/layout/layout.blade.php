@@ -26,7 +26,10 @@
             border-right: 1px solid #eee;
             display: flex;
             flex-direction: column;
-
+            position: fixed;
+            top: 0;
+            left: 0;
+            border-right: 1px solid #eee;
         }
 
         .sidebar nav {
@@ -70,6 +73,7 @@
             flex: 1;
             padding: 30px;
             background-color: #f9f6f1;
+            margin-left: 250px;
         }
 
         .logout {
@@ -83,7 +87,7 @@
             border: none;
             padding: 12px;
             border-radius: 8px;
-             color: #ff7a00;
+            color: #ff7a00;
             font-weight: 600;
             display: flex;
             align-items: center;
@@ -112,27 +116,48 @@
             <!-- Menu -->
             <nav class="mt-3">
 
-                {{-- ADMIN --}}
+                {{-- ================= ADMIN ================= --}}
                 @if(auth()->user()->role === 'admin')
+
                     <a href="{{ route('dashboard') }}" class="{{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                        <i class="bi bi-speedometer2 me-2"></i> Tableau de bord
                     </a>
+
+                    <a href="#" class="{{ request()->routeIs('terrains.*') ? 'active' : '' }}">
+                        <i class="bi bi-map me-2"></i> Terrains
+                    </a>
+
+                    <a href="#" class="{{ request()->routeIs('reservations.*') ? 'active' : '' }}">
+                        <i class="bi bi-calendar-check me-2"></i> Réservations
+                    </a>
+
+                    <a href="#" class="{{ request()->routeIs('clients.*') ? 'active' : '' }}">
+                        <i class="bi bi-people me-2"></i> Clients
+                    </a>
+
+                    {{-- ================= CLIENT ================= --}}
                 @else
-                    {{-- CLIENT --}}
-                    <a>
-                        <i class="bi bi-house-door me-2"></i> Accueil
+
+                    <a href="{{ route('acceuil') }}" class="{{ request()->routeIs('acceuil') ? 'active' : '' }}">
+                        <i class="bi bi-house-door me-2"></i> Home
                     </a>
+
+                    <a href="{{ route('propos') }}" class="{{ request()->routeIs('propos') ? 'active' : '' }}">
+                        <i class="bi bi-info-circle me-2"></i> À propos
+                    </a>
+
+                    <a href="#" class="{{ request()->routeIs('terrains.*') ? 'active' : '' }}">
+                        <i class="bi bi-map me-2"></i> Terrains
+                    </a>
+
+                    <a href="#" class="{{ request()->routeIs('contact') ? 'active' : '' }}">
+                        <i class="bi bi-envelope me-2"></i> Contact
+                    </a>
+
                 @endif
 
-                <a>
-                    <i class="bi bi-map me-2"></i> Terrains
-                </a>
-
-                <a>
-                    <i class="bi bi-calendar-check me-2"></i> Réservations
-                </a>
-
             </nav>
+
 
             <!-- Déconnexion en bas -->
             <div class="logout">

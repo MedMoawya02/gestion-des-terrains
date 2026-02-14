@@ -17,7 +17,12 @@ class LoginController extends Controller
         ]);
         if(Auth::attempt($credentials)){
             $request->session()->regenerate();
-            return redirect()->route('dashboard');
+            if(auth()->user()->isAdmin()){
+                return redirect()->route('dashboard');
+            }else{
+                return redirect()->route(route: 'acceuil');
+            }
+            
         }
          return back()->withErrors([
             'email' => 'Email ou mot de passe incorrect.',
