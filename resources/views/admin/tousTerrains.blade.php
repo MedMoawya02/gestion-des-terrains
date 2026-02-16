@@ -34,17 +34,17 @@
     <!-- Barre de recherche et filtres -->
     <div class="row g-3 mb-4">
         <div class="col-md-6">
-            <input type="text" class="form-control rounded-3" placeholder="Rechercher par nom ou adresse...">
+            <input type="text" id="searchInput" class="form-control rounded-3" placeholder="Rechercher par nom ou adresse...">
         </div>
         <div class="col-md-3">
-            <select class="form-select rounded-3">
+            <select class="form-select rounded-3" id="selectSearch">
                 <option value="">Tous les types</option>
                 <option value="7vs7">7 vs 7</option>
                 <option value="11vs11">11 vs 11</option>
             </select>
         </div>
         <div class="col-md-3">
-            <select class="form-select rounded-3">
+            <select class="form-select rounded-3" >
                 <option value="">Tous les statuts</option>
                 <option value="disponible">Disponible</option>
                 <option value="En maintenance">Maintenance</option>
@@ -56,7 +56,7 @@
     <div class="row g-4">
 
         @forelse($terrains as $terrain)
-            <div class="col-md-3">
+            <div class="col-md-3 terrain-card"  data-nom="{{ $terrain->nom }}" data-adresse="{{ $terrain->adresse }}" data-type="{{ $terrain->type }}">
                 <div class="card border-0 shadow-sm rounded-4 overflow-hidden h-100">
 
                     <!-- Image (placeholder pour test) -->
@@ -134,5 +134,34 @@
     </div>
 
 </div>
-
+<script>
+    let search=document.getElementById('searchInput');
+    let select=document.getElementById('selectSearch');
+    let terrainsCards=document.querySelectorAll('.terrain-card')
+    search.addEventListener('input',(e)=>{
+        let query=e.target.value.toLowerCase();
+        terrainsCards.forEach(card=>{
+            let nom=card.getAttribute('data-nom').toLowerCase();
+            let adresse=card.getAttribute('data-adresse').toLowerCase();
+            if(nom.includes(query)||adresse.includes(query)){
+                card.style.display="block";
+            }else{
+                card.style.display='none';
+            }
+        })
+    })
+    select.addEventListener('change',function(e){
+        let query=e.target.value;
+        terrainsCards.forEach(card=>{
+            let type=card.getAttribute('data-type');   
+            if(type==query||query==""){
+                card.style.display="block";
+            }else{
+                card.style.display='none';
+            }     
+        })
+        
+    })
+    
+</script>
 @endsection
