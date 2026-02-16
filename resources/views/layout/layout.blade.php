@@ -123,7 +123,7 @@
                         <i class="bi bi-speedometer2 me-2"></i> Tableau de bord
                     </a>
 
-                    <a href="#" class="{{ request()->routeIs('terrains.*') ? 'active' : '' }}">
+                    <a href="{{ route('createTerrain') }}" class="{{ request()->routeIs('createTerrain') ? 'active' : '' }}">
                         <i class="bi bi-map me-2"></i> Terrains
                     </a>
 

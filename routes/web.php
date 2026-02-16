@@ -16,6 +16,9 @@ Route::post('/logout', [LoginController::class,'logout'])->name('login.logout');
 
 // Admin
 Route::get('/dashboard', [AdminController::class,'index'])->name('dashboard')->middleware(['auth',AdminMiddleware::class]);
+Route::get('/terrains', [AdminController::class,'create'])->name('createTerrain')->middleware(['auth',AdminMiddleware::class]);
+Route::post('/ajouterTerrain', [AdminController::class,'store'])->name('ajouterTerrain')->middleware(['auth',AdminMiddleware::class]);
+Route::get('/tousTerrains', [AdminController::class,'allTerrains'])->name('tousTerrain')->middleware(['auth',AdminMiddleware::class]);
 
 //client
 Route::get('/acceuil',[ClientController::class,'index'])->name('acceuil')->middleware('auth');
