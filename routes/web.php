@@ -19,6 +19,8 @@ Route::get('/dashboard', [AdminController::class,'index'])->name('dashboard')->m
 Route::get('/terrains', [AdminController::class,'create'])->name('createTerrain')->middleware(['auth',AdminMiddleware::class]);
 Route::post('/ajouterTerrain', [AdminController::class,'store'])->name('ajouterTerrain')->middleware(['auth',AdminMiddleware::class]);
 Route::get('/tousTerrains', [AdminController::class,'allTerrains'])->name('tousTerrain')->middleware(['auth',AdminMiddleware::class]);
+Route::put('/modifierTerrain/{id}', [AdminController::class,'update'])->name('modifierTerrain')->middleware(['auth',AdminMiddleware::class]);
+Route::post('/supprimerTerrain/{id}', [AdminController::class,'destroy'])->name('deleteTerrain')->middleware(['auth',AdminMiddleware::class]);
 
 //client
 Route::get('/acceuil',[ClientController::class,'index'])->name('acceuil')->middleware('auth');
