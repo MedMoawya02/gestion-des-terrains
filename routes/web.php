@@ -25,3 +25,4 @@ Route::post('/supprimerTerrain/{id}', [AdminController::class,'destroy'])->name(
 //client
 Route::get('/acceuil',[ClientController::class,'index'])->name('acceuil')->middleware('auth');
 Route::get('/à propos',[ClientController::class,'aboutPage'])->name('propos')->middleware('auth');
+Route::get('/terrains',[ClientController::class,'reservationPage'])->name(name: 'reservation')->middleware('auth');
