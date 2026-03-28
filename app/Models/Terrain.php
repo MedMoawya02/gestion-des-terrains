@@ -15,4 +15,8 @@ class Terrain extends Model
         'prix_par_heure',
         'statut',
     ];
+    //relation with users
+    public function users(){
+        return $this->belongsToMany(User::class);
+    }
 }

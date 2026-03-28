@@ -37,7 +37,7 @@
                 </p>
 
                 <div class="d-flex gap-3">
-                    <a href="#" class="btn btn-lg px-4" style="background:#ff7a00;color:white;">
+                    <a href="{{ route('reservation') }}" class="btn btn-lg px-4" style="background:#ff7a00;color:white;">
                         Réserver maintenant
                     </a>
 

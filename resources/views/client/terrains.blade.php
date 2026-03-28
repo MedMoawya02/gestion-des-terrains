@@ -205,7 +205,8 @@
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content rounded-4 shadow">
 
-                <form method="POST" action="#">
+                <form method="POST" action="{{ route('createReservation') }}">
+                    @method('POST')
                     @csrf
 
                     <div class="modal-header border-0">
@@ -222,26 +223,27 @@
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Date</label>
-                            <input type="date" name="date" class="form-control rounded-pill" required>
+                            <input type="date" name="date" value="{{ request('date', date('Y-m-d')) }}"
+                                onchange="window.location.href='/terrains?date=' + this.value + '&openModal=' + document.getElementById('terrainId').value"
+                                class="form-control rounded-pill" required>
                         </div>
 
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Heure début</label>
-                            <select name="heure_debut" class="form-select rounded-pill" required>
+                            <select name="heure_debut" id="heure_debut_select" class="form-select rounded-pill" required>
                                 @for($h = 8; $h <= 22; $h++)
                                     <option value="{{ $h }}:00">{{ $h }}h</option>
                                 @endfor
                             </select>
                         </div>
 
-                        <div class="mb-3">
+                        {{-- <div class="mb-3">
                             <label class="form-label fw-semibold">Heure fin</label>
                             <select name="heure_fin" class="form-select rounded-pill" required>
-                                @for($h = 9; $h <= 23; $h++)
-                                    <option value="{{ $h }}:00">{{ $h }}h</option>
-                                @endfor
+                                @for($h = 9; $h <= 23; $h++) <option value="{{ $h }}:00">{{ $h }}h</option>
+                                    @endfor
                             </select>
-                        </div>
+                        </div> --}}
 
                         <div class="modal-footer border-0">
                             <button type="submit" class="btn btn-success rounded-pill w-100">
@@ -258,14 +260,58 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 <script>
+    /*  document.addEventListener('DOMContentLoaded', function () {
+         let modal = document.getElementById('reservationModal');
+         modal.addEventListener('show.bs.modal', function (e) {
+             let buttonclicked = e.relatedTarget;
+             const terrainId = buttonclicked.getAttribute('data-id');
+             const terrainNom = buttonclicked.getAttribute('data-nom');
+             document.getElementById('terrainId').value = terrainId;
+             document.getElementById('terrainNom').textContent = terrainNom;
+         })
+     }) */
     document.addEventListener('DOMContentLoaded', function () {
-        let modal = document.getElementById('reservationModal');
-        modal.addEventListener('show.bs.modal', function (e) {
-            let buttonclicked = e.relatedTarget;
-            const terrainId = buttonclicked.getAttribute('data-id');
-            const terrainNom = buttonclicked.getAttribute('data-nom');
-            document.getElementById('terrainId').value = terrainId;
-            document.getElementById('terrainNom').textContent = terrainNom;
-        })
-    })
+        let modalEl = document.getElementById('reservationModal');
+        let bootstrapModal = new bootstrap.Modal(modalEl);
+        let occupations = @json($heuresReservees); // On passe les données PHP à JS
+
+        // 1. Logique d'ouverture classique
+        modalEl.addEventListener('show.bs.modal', function (e) {
+            let button = e.relatedTarget;
+            if (button) {
+                updateModalData(button.getAttribute('data-id'), button.getAttribute('data-nom'));
+            }
+        });
+
+        function updateModalData(id, nom) {
+            document.getElementById('terrainId').value = id;
+            document.getElementById('terrainNom').textContent = nom;
+
+            // Mise à jour des heures disponibles pour ce terrain
+            let select = document.getElementById('heure_debut_select');
+            let terrainOccupations = occupations[id] || [];
+
+            Array.from(select.options).forEach(option => {
+                if (terrainOccupations.includes(option.value)) {
+                    option.disabled = true;
+                    option.text = option.value.replace(':00', 'h') + " (🚫 Réservé)";
+                } else {
+                    option.disabled = false;
+                    option.text = option.value.replace(':00', 'h');
+                }
+            });
+        }
+
+        // 2. Auto-réouverture si on a changé la date
+        const urlParams = new URLSearchParams(window.location.search);
+        const openModalId = urlParams.get('openModal');
+        if (openModalId) {
+            // On trouve le bouton qui correspond à ce terrain pour simuler le clic
+            let btn = document.querySelector(`[data-id="${openModalId}"]`);
+            if (btn) {
+                updateModalData(openModalId, btn.getAttribute('data-nom'));
+                bootstrapModal.show();
+            }
+        }
+    });
 </script>

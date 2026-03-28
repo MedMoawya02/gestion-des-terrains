@@ -4,6 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,7 @@ Route::post('/logout', [LoginController::class,'logout'])->name('login.logout');
 
 // Admin
 Route::get('/dashboard', [AdminController::class,'index'])->name('dashboard')->middleware(['auth',AdminMiddleware::class]);
-Route::get('/terrains', [AdminController::class,'create'])->name('createTerrain')->middleware(['auth',AdminMiddleware::class]);
+Route::get('/create-terrains', [AdminController::class,'create'])->name('createTerrain')->middleware(['auth',AdminMiddleware::class]);
 Route::post('/ajouterTerrain', [AdminController::class,'store'])->name('ajouterTerrain')->middleware(['auth',AdminMiddleware::class]);
 Route::get('/tousTerrains', [AdminController::class,'allTerrains'])->name('tousTerrain')->middleware(['auth',AdminMiddleware::class]);
 Route::put('/modifierTerrain/{id}', [AdminController::class,'update'])->name('modifierTerrain')->middleware(['auth',AdminMiddleware::class]);
@@ -25,4 +26,5 @@ Route::post('/supprimerTerrain/{id}', [AdminController::class,'destroy'])->name(
 //client
 Route::get('/acceuil',[ClientController::class,'index'])->name('acceuil')->middleware('auth');
 Route::get('/à propos',[ClientController::class,'aboutPage'])->name('propos')->middleware('auth');
-Route::get('/terrains',[ClientController::class,'reservationPage'])->name(name: 'reservation')->middleware('auth');
+Route::get('/terrains',[ReservationController::class,'reservationPage'])->name(name: 'reservation')->middleware('auth');
+Route::post('/reservation',[ReservationController::class,'store'])->name('createReservation')->middleware('auth');

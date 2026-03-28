@@ -54,4 +54,9 @@ class User extends Authenticatable
     public function isClient(){
         return $this->role==='client';
     }
+
+    //relation with terrains
+    public function terrains(){
+        return $this->belongsToMany(Terrain::class);
+    }
 }

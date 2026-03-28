@@ -141,14 +141,15 @@
                     <a href="{{ route('acceuil') }}" class="{{ request()->routeIs('acceuil') ? 'active' : '' }}">
                         <i class="bi bi-house-door me-2"></i> Acceuil
                     </a>
+                    
+                    <a href="{{ route('reservation') }}" class="{{ request()->routeIs('reservation') ? 'active' : '' }}">
+                        <i class="bi bi-map me-2"></i> Terrains
+                    </a>
 
                     <a href="{{ route('propos') }}" class="{{ request()->routeIs('propos') ? 'active' : '' }}">
                         <i class="bi bi-info-circle me-2"></i> À propos
                     </a>
 
-                    <a href="{{ route('reservation') }}" class="{{ request()->routeIs('reservation') ? 'active' : '' }}">
-                        <i class="bi bi-map me-2"></i> Terrains
-                    </a>
 
                     <a href="#" class="{{ request()->routeIs('contact') ? 'active' : '' }}">
                         <i class="bi bi-envelope me-2"></i> Contact
