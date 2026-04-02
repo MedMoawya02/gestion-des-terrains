@@ -146,6 +146,10 @@
                         <i class="bi bi-map me-2"></i> Terrains
                     </a>
 
+                    <a href="{{ route('mesReservations') }}" class="{{ request()->routeIs('mesReservations') ? 'active' : '' }}">
+                        <i class="bi bi-card-checklist me-2"></i> Mes réservations
+                    </a>
+
                     <a href="{{ route('propos') }}" class="{{ request()->routeIs('propos') ? 'active' : '' }}">
                         <i class="bi bi-info-circle me-2"></i> À propos
                     </a>

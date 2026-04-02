@@ -135,7 +135,8 @@
 
                                 <a href="#" class="btn btn-success w-100 mt-auto rounded-pill" data-bs-toggle="modal"
                                     data-bs-target="#reservationModal" data-id="{{ $terrain->id }}"
-                                    data-nom="{{ $terrain->nom }}">
+                                    data-nom="{{ $terrain->nom }}"
+                                    data-prix="{{ $terrain->prix_par_heure }}">
                                     Réserver
                                 </a>
 
@@ -147,6 +148,14 @@
             </div>
 
         </div>
+        @if(session('message'))
+            <div class="container mt-3">
+                <div class="alert alert-success alert-dismissible fade show rounded-pill shadow-sm border-0 px-4" role="alert">
+                    <span class="me-2">✅</span> {{ session('message') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            </div>
+        @endif
     </section>
 
 
@@ -222,9 +231,14 @@
                         <input type="hidden" name="terrain_id" id="terrainId">
 
                         <div class="mb-3">
+                            <label class="form-label fw-semibold">Prix (DH)</label>
+                            <input type="text" id="terrainPrix" class="form-control rounded-pill" disabled>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label fw-semibold">Date</label>
                             <input type="date" name="date" value="{{ request('date', date('Y-m-d')) }}"
-                                onchange="window.location.href='/terrains?date=' + this.value + '&openModal=' + document.getElementById('terrainId').value"
+                                onchange="window.location.href='/terrains?date=' + this.value + '&openModal=' + document.getElementById('terrainId').value + '#terrains'"
                                 class="form-control rounded-pill" required>
                         </div>
 
@@ -279,13 +293,14 @@
         modalEl.addEventListener('show.bs.modal', function (e) {
             let button = e.relatedTarget;
             if (button) {
-                updateModalData(button.getAttribute('data-id'), button.getAttribute('data-nom'));
+                updateModalData(button.getAttribute('data-id'), button.getAttribute('data-nom'),button.getAttribute('data-prix'));
             }
         });
 
-        function updateModalData(id, nom) {
+        function updateModalData(id, nom,prix) {
             document.getElementById('terrainId').value = id;
             document.getElementById('terrainNom').textContent = nom;
+            document.getElementById('terrainPrix').value = prix;
 
             // Mise à jour des heures disponibles pour ce terrain
             let select = document.getElementById('heure_debut_select');

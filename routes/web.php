@@ -28,3 +28,4 @@ Route::get('/acceuil',[ClientController::class,'index'])->name('acceuil')->middl
 Route::get('/à propos',[ClientController::class,'aboutPage'])->name('propos')->middleware('auth');
 Route::get('/terrains',[ReservationController::class,'reservationPage'])->name(name: 'reservation')->middleware('auth');
 Route::post('/reservation',[ReservationController::class,'store'])->name('createReservation')->middleware('auth');
+Route::get('/mes-reservations', [ReservationController::class, 'mesReservations'])->name('mesReservations')->middleware('auth');

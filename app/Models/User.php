@@ -56,7 +56,11 @@ class User extends Authenticatable
     }
 
     //relation with terrains
-    public function terrains(){
+    /* public function terrains(){
         return $this->belongsToMany(Terrain::class);
-    }
+    } */
+
+     public function reservations(){
+    return $this->belongsTo(Reservation::class);
+   }
 }

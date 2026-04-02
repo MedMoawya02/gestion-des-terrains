@@ -12,4 +12,10 @@ class Reservation extends Model
         'user_id',
         'terrain_id',
     ];
+    public function User(){
+        return $this->belongsTo(User::class);
+    }
+    public function Terrain(){
+        return $this->belongsTo(Terrain::class);
+    }
 }
