@@ -9,6 +9,7 @@ class Reservation extends Model
     protected $fillable=[
         'date',
         'heure_debut',
+        'prix_par_heure',
         'user_id',
         'terrain_id',
     ];

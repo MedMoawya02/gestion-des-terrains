@@ -27,20 +27,39 @@ class ReservationController extends Controller
     }
     public function store(ReservationRequest $reservation)
     {
-        $user = auth()->user();
-        Reservation::create([
-            'date' => $reservation->date,
-            'heure_debut' => $reservation->heure_debut,
-            'user_id' => $user->id,
-            'terrain_id' => $reservation->terrain_id,
-        ]);
-        return redirect()->to(route('reservation') . '#terrains')
-            ->with('message', 'Vous avez réservé avec succès .');
+        try {
+            $user = auth()->user();
+            $terrain = Terrain::findOrFail($reservation->terrain_id);
 
+            Reservation::create([
+                'date' => $reservation->date,
+                'heure_debut' => $reservation->heure_debut,
+                'prix_par_heure' => $terrain->prix_par_heure,
+                'user_id' => $user->id,
+                'terrain_id' => $reservation->terrain_id,
+            ]);
+            return redirect()->to(route('reservation') . '#terrains')
+                ->with('message', 'Vous avez réservé avec succès.');
+
+        } catch (\Exception $e) {
+            dd($e->getMessage());
+        }
     }
 
-    public function mesReservations(){
-        $reservations=Reservation::with('terrain')->where('user_id',auth()->id())->orderBy('date','desc')->get();
-        return View('client.mesReservations',compact('reservations'));
+    public function mesReservations(Request $request)
+    {
+        $query = Reservation::with('terrain')->where('user_id', auth()->id());
+
+        if ($request->has('mois') && $request->mois != '') {
+            $query->whereMonth('date', date('m', strtotime($request->mois)))
+                ->whereYear('date', date('Y', strtotime($request->mois)));
+        }
+
+        $reservations = $query->orderBy('date', 'desc')->get();
+        $totalMontant = $reservations->sum(function ($res) {
+            return $res->terrain->prix_par_heure;
+        });
+
+        return View('client.mesReservations', compact('reservations', 'totalMontant'));
     }
 }

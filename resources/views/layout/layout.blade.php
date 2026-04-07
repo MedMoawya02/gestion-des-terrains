@@ -127,7 +127,7 @@
                         <i class="bi bi-map me-2"></i> Terrains
                     </a>
 
-                    <a href="#" class="{{ request()->routeIs('reservations.*') ? 'active' : '' }}">
+                    <a href="{{ route('historique') }}" class="{{ request()->routeIs('historique') ? 'active' : '' }}">
                         <i class="bi bi-calendar-check me-2"></i> Réservations
                     </a>
 
