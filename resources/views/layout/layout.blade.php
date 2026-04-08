@@ -104,7 +104,7 @@
 </head>
 
 <body>
-
+    @include('components.toast');
     <div class="d-flex">
 
         <!-- Sidebar -->
@@ -123,7 +123,8 @@
                         <i class="bi bi-speedometer2 me-2"></i> Tableau de bord
                     </a>
 
-                    <a href="{{ route('createTerrain') }}" class="{{ request()->routeIs('createTerrain') ? 'active' : '' }}">
+                    <a href="{{ route('createTerrain') }}"
+                        class="{{ request()->routeIs('createTerrain') ? 'active' : '' }}">
                         <i class="bi bi-map me-2"></i> Terrains
                     </a>
 
@@ -141,12 +142,13 @@
                     <a href="{{ route('acceuil') }}" class="{{ request()->routeIs('acceuil') ? 'active' : '' }}">
                         <i class="bi bi-house-door me-2"></i> Acceuil
                     </a>
-                    
+
                     <a href="{{ route('reservation') }}" class="{{ request()->routeIs('reservation') ? 'active' : '' }}">
                         <i class="bi bi-map me-2"></i> Terrains
                     </a>
 
-                    <a href="{{ route('mesReservations') }}" class="{{ request()->routeIs('mesReservations') ? 'active' : '' }}">
+                    <a href="{{ route('mesReservations') }}"
+                        class="{{ request()->routeIs('mesReservations') ? 'active' : '' }}">
                         <i class="bi bi-card-checklist me-2"></i> Mes réservations
                     </a>
 
@@ -182,7 +184,23 @@
         </div>
 
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ asset('js/notifications.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            @if(session('success'))
+                showToast("{{ session('success') }}", 'success');
+            @endif
+
+            @if(session('error'))
+                showToast("{{ session('error') }}", 'danger');
+            @endif
+        });
+    </script>
 
 </body>
+
 
 </html>

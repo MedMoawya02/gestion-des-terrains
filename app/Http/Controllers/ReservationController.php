@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\ReservationsExport;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use App\Models\Terrain;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ReservationController extends Controller
 {
@@ -61,5 +63,10 @@ class ReservationController extends Controller
         });
 
         return View('client.mesReservations', compact('reservations', 'totalMontant'));
+    }
+
+    public function export()
+    {
+        return Excel::download(new ReservationsExport, 'reservations-' . date('d-m-Y') . '.xlsx');
     }
 }

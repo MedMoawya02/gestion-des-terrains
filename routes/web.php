@@ -1,32 +1,49 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\ReservationController;
 use App\Http\Middleware\AdminMiddleware;
-use Illuminate\Support\Facades\Route;
 
-//authentification routes
-Route::get('/register', [RegisterController::class,'index'])->name('register.index');
-Route::post('/register/register', [RegisterController::class,'register'])->name('register.register');
-Route::get('/', [LoginController::class,'index'])->name('login.index');
-Route::post('/login', [LoginController::class,'login'])->name('login.check');
-Route::post('/logout', [LoginController::class,'logout'])->name('login.logout');
+Route::get('/', [LoginController::class, 'index'])->name('login.index');
+Route::post('/login', [LoginController::class, 'login'])->name('login.check');
+Route::get('/register', [RegisterController::class, 'index'])->name('register.index');
+Route::post('/register', [RegisterController::class, 'register'])->name('register.register');
+Route::post('/logout', [LoginController::class, 'logout'])->name('login.logout')->middleware('auth');
 
-// Admin
-Route::get('/dashboard', [AdminController::class,'index'])->name('dashboard')->middleware(['auth',AdminMiddleware::class]);
-Route::get('/create-terrains', [AdminController::class,'create'])->name('createTerrain')->middleware(['auth',AdminMiddleware::class]);
-Route::post('/ajouterTerrain', [AdminController::class,'store'])->name('ajouterTerrain')->middleware(['auth',AdminMiddleware::class]);
-Route::get('/tousTerrains', [AdminController::class,'allTerrains'])->name('tousTerrain')->middleware(['auth',AdminMiddleware::class]);
-Route::put('/modifierTerrain/{id}', [AdminController::class,'update'])->name('modifierTerrain')->middleware(['auth',AdminMiddleware::class]);
-Route::post('/supprimerTerrain/{id}', [AdminController::class,'destroy'])->name('deleteTerrain')->middleware(['auth',AdminMiddleware::class]);
-Route::get('/historique', [AdminController::class,'allReservation'])->name('historique')->middleware(['auth',AdminMiddleware::class]);
 
-//client
-Route::get('/acceuil',[ClientController::class,'index'])->name('acceuil')->middleware('auth');
-Route::get('/à propos',[ClientController::class,'aboutPage'])->name('propos')->middleware('auth');
-Route::get('/terrains',[ReservationController::class,'reservationPage'])->name(name: 'reservation')->middleware('auth');
-Route::post('/reservation',[ReservationController::class,'store'])->name('createReservation')->middleware('auth');
-Route::get('/mes-reservations', [ReservationController::class, 'mesReservations'])->name('mesReservations')->middleware('auth');
+Route::middleware('auth')->group(function () {
+    /* --- Espace ADMIN --- */
+    Route::middleware(AdminMiddleware::class)->group(function () {
+        // Dashboard & Statistiques
+        Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+
+        // Gestion des Terrains
+        Route::prefix('terrains')->group(function () {
+            Route::get('/', [AdminController::class, 'allTerrains'])->name('tousTerrain');
+            Route::get('/creer', [AdminController::class, 'create'])->name('createTerrain');
+            Route::post('/stocker', [AdminController::class, 'store'])->name('ajouterTerrain');
+            Route::put('/{id}', [AdminController::class, 'update'])->name('modifierTerrain');
+            Route::post('/supprimer/{id}', [AdminController::class, 'destroy'])->name('deleteTerrain');
+        });
+        // Gestion des Réservations & Export
+        Route::get('/historique', [AdminController::class, 'allReservation'])->name('historique');
+        Route::get('/reservations/export', [ReservationController::class, 'export'])->name('admin.reservations.export');
+    });
+
+
+    /* --- Espace CLIENT --- */
+    Route::group([], function () {
+        Route::get('/accueil', [ClientController::class, 'index'])->name('acceuil');
+        Route::get('/a-propos', [ClientController::class, 'aboutPage'])->name('propos');
+
+        // Réservations Client
+        Route::get('/reserver-terrain', [ReservationController::class, 'reservationPage'])->name('reservation');
+        Route::post('/reserver', [ReservationController::class, 'store'])->name('createReservation');
+        Route::get('/mes-reservations', [ReservationController::class, 'mesReservations'])->name('mesReservations');
+    });
+
+});

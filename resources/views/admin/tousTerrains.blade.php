@@ -173,7 +173,7 @@
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content rounded-4 shadow-lg border-0">
 
-                    <form id="editForm" method="POST">
+                    <form  id="editForm" method="POST">
                         @csrf
                         @method('PUT')
 
@@ -316,7 +316,7 @@
                 document.getElementById('modalPrix').value = this.dataset.prix;
                 document.getElementById('modalStatut').value = this.dataset.statut;
 
-                document.getElementById('editForm').action = `/modifierTerrain/${id}`;
+                document.getElementById('editForm').action = `/terrains/${id}`;
             })
 
         })
