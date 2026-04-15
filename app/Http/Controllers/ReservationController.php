@@ -6,6 +6,8 @@ use App\Exports\ReservationsExport;
 use App\Http\Requests\ReservationRequest;
 use App\Models\Reservation;
 use App\Models\Terrain;
+use App\Models\User;
+use App\Notifications\NouvelleReservation;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -27,19 +29,32 @@ class ReservationController extends Controller
         ;
         return view('client.terrains', compact('terrains', 'date', 'heuresReservees'));
     }
-    public function store(ReservationRequest $reservation)
+    public function store(ReservationRequest $request) 
     {
         try {
             $user = auth()->user();
-            $terrain = Terrain::findOrFail($reservation->terrain_id);
+            $terrain = Terrain::findOrFail($request->terrain_id);
 
-            Reservation::create([
-                'date' => $reservation->date,
-                'heure_debut' => $reservation->heure_debut,
+            // 1. Stocker l'instance créée dans une variable
+            $nouvelleReservation = Reservation::create([
+                'date' => $request->date,
+                'heure_debut' => $request->heure_debut,
                 'prix_par_heure' => $terrain->prix_par_heure,
                 'user_id' => $user->id,
-                'terrain_id' => $reservation->terrain_id,
+                'terrain_id' => $request->terrain_id,
             ]);
+
+            // 2. Charger les relations nécessaires pour la notification
+            $nouvelleReservation->load(['terrain', 'user']);
+
+            // 3. Trouver l'admin
+            $admin = User::where('role', 'admin')->first();
+
+            // 4. Envoyer l'OBJET de la base de données (pas le Request)
+            if ($admin) {
+                $admin->notify(new NouvelleReservation($nouvelleReservation));
+            }
+
             return redirect()->to(route('reservation') . '#terrains')
                 ->with('message', 'Vous avez réservé avec succès.');
 

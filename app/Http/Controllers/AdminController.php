@@ -36,8 +36,8 @@ class AdminController extends Controller
     }
     public function create()
     {
-        
-        $lastTerrains=$this->terrainRepo->getLatest(3); 
+
+        $lastTerrains = $this->terrainRepo->getLatest(3);
         return view('admin.terrains', compact('lastTerrains'));
     }
     public function store(StoreTerrainRequest $request)
@@ -54,7 +54,7 @@ class AdminController extends Controller
             'prix_par_heure' => 'required|numeric|min:10',
             'statut' => 'required'
         ]);
-        $this->terrainRepo->update($id,$request->all());
+        $this->terrainRepo->update($id, $request->all());
         return redirect()->back()->with('success', 'Terrain mis à jour avec succès !');
     }
     public function destroy($id)
@@ -70,7 +70,32 @@ class AdminController extends Controller
 
     public function allReservation()
     {
-        $reservations = $this->dashboardRepo->getReservationsHistory(request('search'),8);
+        $reservations = $this->dashboardRepo->getReservationsHistory(request('search'), 8);
         return view('admin.historiqueComponents.historique', compact('reservations'));
+    }
+    public function calendrier()
+    {
+        // Récupérer les réservations avec les relations
+        $reservations = Reservation::with(['user', 'terrain'])->get();
+
+        $events = [];
+
+        foreach ($reservations as $res) {
+            $events[] = [
+                'id' => $res->id,
+                'title' => $res->terrain->nom . ' (' . $res->user->name . ')',
+                'start' => $res->date . 'T' . $res->heure_debut, // Format ISO8601
+                'end' => $res->date . 'T' . $res->heure_fin,
+                'backgroundColor' => '#ff7a00',
+                'borderColor' => '#e66e00',
+                'extendedProps' => [
+                    'client' => $res->user->name,
+                    'terrain' => $res->terrain->nom,
+                    'statut' => $res->statut
+                ]
+            ];
+        }
+
+        return view('admin.calendrier', ['events' => $events]);
     }
 }

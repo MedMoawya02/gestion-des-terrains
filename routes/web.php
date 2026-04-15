@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
     Route::middleware(AdminMiddleware::class)->group(function () {
         // Dashboard & Statistiques
         Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+        Route::get('/calendrier', [AdminController::class, 'calendrier'])->name('calendrier');
 
         // Gestion des Terrains
         Route::prefix('terrains')->group(function () {

@@ -7,7 +7,7 @@
                     <th class="py-3 border-0">Terrain</th>
                     <th class="py-3 border-0">Date & Heure</th>
                     <th class="py-3 border-0">Montant</th>
-                    <th class="py-3 border-0">Statut</th>
+                    {{-- <th class="py-3 border-0">Statut</th> --}}
                     <th class="py-3 border-0 text-end pe-4">Actions</th>
                 </tr>
             </thead>
@@ -38,7 +38,7 @@
                         <td>
                             <span class="fw-bold">{{ number_format($res->prix_par_heure, 2) }} DH</span>
                         </td>
-                        <td>
+                     {{--    <td>
                             @if($res->statut == 'confirmée')
                                 <span class="badge rounded-pill bg-success-subtle text-success px-3">Confirmé</span>
                             @elseif($res->statut == 'en_attente')
@@ -46,7 +46,7 @@
                             @else
                                 <span class="badge rounded-pill bg-danger-subtle text-danger px-3">Annulé</span>
                             @endif
-                        </td>
+                        </td> --}}
                         <td class="text-end pe-4">
                             <div class="dropdown">
                                 <button class="btn btn-light btn-sm rounded-circle" data-bs-toggle="dropdown">

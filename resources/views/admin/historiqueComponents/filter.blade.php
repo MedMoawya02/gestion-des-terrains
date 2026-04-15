@@ -5,7 +5,7 @@
                 <label class="form-label small fw-bold text-uppercase text-muted">Rechercher</label>
                 <input type="text" name="search" class="form-control rounded-3" placeholder="Nom du client, terrain...">
             </div>
-            <div class="col-md-2">
+           {{--  <div class="col-md-2">
                 <label class="form-label small fw-bold text-uppercase text-muted">Statut</label>
                 <select name="status" class="form-select rounded-3">
                     <option value="">Tous les statuts</option>
@@ -13,7 +13,7 @@
                     <option value="en_attente">En attente</option>
                     <option value="annule">Annulé</option>
                 </select>
-            </div>
+            </div> --}}
             <div class="col-md-3">
                 <label class="form-label small fw-bold text-uppercase text-muted">Date</label>
                 <input type="date" name="date" class="form-control rounded-3">
