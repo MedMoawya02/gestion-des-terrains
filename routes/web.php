@@ -44,6 +44,8 @@ Route::middleware('auth')->group(function () {
         // Réservations Client
         Route::get('/reserver-terrain', [ReservationController::class, 'reservationPage'])->name('reservation');
         Route::post('/reserver', [ReservationController::class, 'store'])->name('createReservation');
+        Route::post('/reservations/{id}/annuler', [ReservationController::class, 'annuler'])
+          ->name('res.annuler');
         Route::get('/mes-reservations', [ReservationController::class, 'mesReservations'])->name('mesReservations');
     });
 

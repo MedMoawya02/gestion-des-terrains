@@ -19,7 +19,7 @@ class ReservationController extends Controller
         $terrains = Terrain::where('statut', '=', 'disponible')->get();
         $date = $request->input('date', date('Y-m-d'));
         //Onrécupure les reservations
-        $reservations = Reservation::where('date', $date)->get(['terrain_id', 'heure_debut']);
+        $reservations = Reservation::where('date', $date)->where('statut', '!=', 'annule')->get(['terrain_id', 'heure_debut']);
         //on liste les heures occupés
         $heuresReservees = [];
         foreach ($reservations as $reser) {
@@ -29,7 +29,7 @@ class ReservationController extends Controller
         ;
         return view('client.terrains', compact('terrains', 'date', 'heuresReservees'));
     }
-    public function store(ReservationRequest $request) 
+    public function store(ReservationRequest $request)
     {
         try {
             $user = auth()->user();
@@ -73,13 +73,26 @@ class ReservationController extends Controller
         }
 
         $reservations = $query->orderBy('date', 'desc')->get();
-        $totalMontant = $reservations->sum(function ($res) {
-            return $res->terrain->prix_par_heure;
-        });
+        $totalMontant=$reservations->where('statut','!=','annule')->sum('prix_par_heure');
 
         return View('client.mesReservations', compact('reservations', 'totalMontant'));
     }
 
+    public function annuler($id)
+    {
+        try {
+            $reservation = Reservation::findOrFail($id);
+            $reservation->update([
+                'prix_par_heure'=>0,
+                'statut' => 'annule',
+            ]);
+            return back()->with('message', 'La réservation a été annulée avec succès. Le créneau est désormais libre.');
+            
+        } catch (\Throwable $th) {
+            return back()->with('error', 'Une erreur est survenue lors de l\'annulation.');
+        }
+        
+    }
     public function export()
     {
         return Excel::download(new ReservationsExport, 'reservations-' . date('d-m-Y') . '.xlsx');

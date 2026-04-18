@@ -10,6 +10,7 @@ class Reservation extends Model
         'date',
         'heure_debut',
         'prix_par_heure',
+        'statut',
         'user_id',
         'terrain_id',
     ];

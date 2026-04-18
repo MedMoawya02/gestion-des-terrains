@@ -76,7 +76,7 @@ class AdminController extends Controller
     public function calendrier()
     {
         // Récupérer les réservations avec les relations
-        $reservations = Reservation::with(['user', 'terrain'])->get();
+        $reservations = Reservation::with(['user', 'terrain'])->where('statut','!=','annule')->get();
 
         $events = [];
 

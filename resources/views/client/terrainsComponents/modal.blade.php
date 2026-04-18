@@ -26,7 +26,7 @@
                         <div class="mb-3">
                             <label class="form-label fw-semibold">Date</label>
                             <input type="date" name="date" value="{{ request('date', date('Y-m-d')) }}"
-                                onchange="window.location.href='/terrains?date=' + this.value + '&openModal=' + document.getElementById('terrainId').value + '#terrains'"
+                                onchange="window.location.href='/reserver-terrain?date=' + this.value + '&openModal=' + document.getElementById('terrainId').value + '#terrains'"
                                 class="form-control rounded-pill" required>
                         </div>
 

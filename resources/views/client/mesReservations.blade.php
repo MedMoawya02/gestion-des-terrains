@@ -25,6 +25,7 @@
                             <th>Heure</th>
                             <th>Prix</th>
                             <th>Statut</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -33,9 +34,25 @@
                                 <td class="fw-bold">{{ $res->terrain->nom }}</td>
                                 <td>{{ date('d/m/Y', strtotime($res->date)) }}</td>
                                 <td>{{ $res->heure_debut }}h</td>
-                                <td>{{ $res->terrain->prix_par_heure }} DH</td>
+                                <td>{{ $res->prix_par_heure }} DH</td>
+                                <td class="align-middle">
+                                    @if($res->statut == 'confirmée')
+                                        <span class="badge bg-success-subtle text-success border border-success">Confirmé</span>
+                                    @else
+                                        <span class="badge bg-danger-subtle text-danger border border-danger">Annulé</span>
+                                    @endif
+                                </td>
                                 <td>
-                                    <span class="badge rounded-pill bg-success">Confirmé</span>
+                                    @if ($res->statut=="confirmée")
+                                    
+                                    <form action="{{ route('res.annuler', $res->id) }}" method="POST"
+                                        onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
+                                        @csrf
+                                        <button type="submit" class="btn btn-sm btn-danger">
+                                            <i class="bi bi-x-circle"></i> Annuler
+                                        </button>
+                                    </form>
+                                    @endif
                                 </td>
                             </tr>
                         @endforeach
