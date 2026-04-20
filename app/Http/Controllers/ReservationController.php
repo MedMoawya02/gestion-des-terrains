@@ -8,6 +8,7 @@ use App\Models\Reservation;
 use App\Models\Terrain;
 use App\Models\User;
 use App\Notifications\NouvelleReservation;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\View;
 use Maatwebsite\Excel\Facades\Excel;
@@ -73,6 +74,12 @@ class ReservationController extends Controller
         }
 
         $reservations = $query->orderBy('date', 'desc')->get();
+        foreach($reservations as $res){
+            $date=Carbon::parse($res->date . ' ' . $res->heure_debut);($res->date. ' ' .$res->heure_debut);
+            if($res->statut=="confirmée" &&$date->isPast()){
+                $res->statut="terminee";
+                }
+                }
         $totalMontant=$reservations->where('statut','!=','annule')->sum('prix_par_heure');
 
         return View('client.mesReservations', compact('reservations', 'totalMontant'));

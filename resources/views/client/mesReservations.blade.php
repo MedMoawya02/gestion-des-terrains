@@ -36,22 +36,25 @@
                                 <td>{{ $res->heure_debut }}h</td>
                                 <td>{{ $res->prix_par_heure }} DH</td>
                                 <td class="align-middle">
+                                    {{-- Gestion des badges selon les 3 statuts --}}
                                     @if($res->statut == 'confirmée')
                                         <span class="badge bg-success-subtle text-success border border-success">Confirmé</span>
+                                    @elseif($res->statut == 'terminee')
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary">Terminé</span>
                                     @else
                                         <span class="badge bg-danger-subtle text-danger border border-danger">Annulé</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if ($res->statut=="confirmée")
-                                    
-                                    <form action="{{ route('res.annuler', $res->id) }}" method="POST"
-                                        onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
-                                        @csrf
-                                        <button type="submit" class="btn btn-sm btn-danger">
-                                            <i class="bi bi-x-circle"></i> Annuler
-                                        </button>
-                                    </form>
+                                    @if ($res->statut == "confirmée")
+
+                                        <form action="{{ route('res.annuler', $res->id) }}" method="POST"
+                                            onsubmit="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?');">
+                                            @csrf
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="bi bi-x-circle"></i> Annuler
+                                            </button>
+                                        </form>
                                     @endif
                                 </td>
                             </tr>
