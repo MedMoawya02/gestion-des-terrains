@@ -37,6 +37,13 @@ class ReservationController extends Controller
             $terrain = Terrain::findOrFail($request->terrain_id);
 
             // 1. Stocker l'instance créée dans une variable
+            $dejaUserReserve = Reservation::where('user_id', $user->id)->where('date', $request->date)->where('heure_debut', $request->heure_debut)->where('statut', 'confirmée')->exists();
+            if ($dejaUserReserve) {
+                if ($dejaUserReserve) {
+                    return redirect()->back()
+                        ->with('error', 'Vous avez déjà une réservation prévue pour ce créneau horaire.');
+                }
+            }
             $nouvelleReservation = Reservation::create([
                 'date' => $request->date,
                 'heure_debut' => $request->heure_debut,
@@ -74,13 +81,14 @@ class ReservationController extends Controller
         }
 
         $reservations = $query->orderBy('date', 'desc')->get();
-        foreach($reservations as $res){
-            $date=Carbon::parse($res->date . ' ' . $res->heure_debut);($res->date. ' ' .$res->heure_debut);
-            if($res->statut=="confirmée" &&$date->isPast()){
-                $res->statut="terminee";
-                }
-                }
-        $totalMontant=$reservations->where('statut','!=','annule')->sum('prix_par_heure');
+        foreach ($reservations as $res) {
+            $date = Carbon::parse($res->date . ' ' . $res->heure_debut);
+            ($res->date . ' ' . $res->heure_debut);
+            if ($res->statut == "confirmée" && $date->isPast()) {
+                $res->statut = "terminee";
+            }
+        }
+        $totalMontant = $reservations->where('statut', '!=', 'annule')->sum('prix_par_heure');
 
         return View('client.mesReservations', compact('reservations', 'totalMontant'));
     }
@@ -90,15 +98,15 @@ class ReservationController extends Controller
         try {
             $reservation = Reservation::findOrFail($id);
             $reservation->update([
-                'prix_par_heure'=>0,
+                'prix_par_heure' => 0,
                 'statut' => 'annule',
             ]);
             return back()->with('message', 'La réservation a été annulée avec succès. Le créneau est désormais libre.');
-            
+
         } catch (\Throwable $th) {
             return back()->with('error', 'Une erreur est survenue lors de l\'annulation.');
         }
-        
+
     }
     public function export()
     {

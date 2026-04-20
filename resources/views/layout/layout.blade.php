@@ -191,6 +191,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script src="{{ asset('js/notifications.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
@@ -202,6 +203,24 @@
                 showToast("{{ session('error') }}", 'danger');
             @endif
         });
+
+        //sweet alert
+        @if(session('message'))
+            Swal.fire({
+                icon: 'success',
+                title: 'Succès !',
+                text: "{{ session('message') }}",
+                timer: 3000
+            });
+        @endif
+
+        @if(session('error'))
+            Swal.fire({
+                icon: 'error',
+                title: 'Oups...',
+                text: "{{ session('error') }}",
+            });
+        @endif
     </script>
 
 </body>

@@ -84,7 +84,7 @@ class AdminController extends Controller
             $events[] = [
                 'id' => $res->id,
                 'title' => $res->terrain->nom . ' (' . $res->user->name . ')',
-                'start' => $res->date . 'T' . $res->heure_debut, // Format ISO8601
+                'start' => $res->date . 'T' . $res->heure_debut,
                 'end' => $res->date . 'T' . $res->heure_fin,
                 'backgroundColor' => '#ff7a00',
                 'borderColor' => '#e66e00',
